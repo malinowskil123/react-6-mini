@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component as Comp } from 'react'
+import './App.css'
+import { connect } from 'react-redux'
+import { getUser } from './redux/reducer'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Comp {
+  componentDidMount() {
+    this.props.getUser()
+  }
+
+  render() {
+    console.log(this.props)
+    console.log(this.props.reduxState.user.name)
+    return (
+      <div className='App'>
+        <h1>App.js</h1>
+        {this.props.reduxState.loading ? (
+          <div>We Are Loading</div>
+        ) : (
+          <div>Not Loading</div>
+        )}
+      </div>
+    )
+  }
 }
 
-export default App;
+// store state  maps to app props
+const mapStateToProps = reduxState => {
+  // return { reduxState: reduxState } equal to line below
+  return { reduxState }
+}
+
+// const mapDispatchToProps= {
+
+// }
+
+// then you pass in the function into connect as the first argument
+export default connect(mapStateToProps, { getUser: getUser })(App)
+// export default connect(mapStateToProps, { getUser })(App) <shorthand
